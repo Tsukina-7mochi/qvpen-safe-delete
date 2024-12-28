@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using QvPen.Udon.UI;
 using UnityEngine;
 using UnityEditor;
 using UdonSharpEditor;
 using net.ts7m.qvpen_safe_clear.udon;
+using VRC.SDK3.Components;
 
 namespace net.ts7m.qvpen_safe_clear.editor {
     public class QvPenSafeClearInstallerWindow: EditorWindow {
@@ -27,9 +27,14 @@ namespace net.ts7m.qvpen_safe_clear.editor {
         private const string TextInstall = "インストール";
         private const string TextInstallAll = "すべてインストール";
         private const string TextScanScene = "シーン内を探す";
+        private const string TextDoubleRequired = "ダブルクリックを有効にする";
+        private const string TextDoubleClickDuration = "ダブルクリックの間隔";
+        private readonly string _textHintSummary = $"リストに置き換える QvPen_InteractionButton コンポーネントを追加し、 「{TextInstallAll}」 ボタンまたは 「{TextInstall}」 ボタンにを押すことでコンポーネントを置き換えます。 「{TextScanScene}」 ボタンでアクティブシーン内のすべての QvPen_InteractionButton コンポーネントを自動で追加します。";
 
         private List<QvPen_InteractButton> _clearButtons = new();
         private Vector2 _scrollPos = Vector2.zero;
+        private bool _doubleClickRequired = true;
+        private float _doubleClickDuration = 0.5f;
 
         private string _getCustomEventName(QvPen_InteractButton button) {
             var obj = new SerializedObject(button);
@@ -42,6 +47,21 @@ namespace net.ts7m.qvpen_safe_clear.editor {
         }
 
         private void OnGUI() {
+            EditorGUILayout.HelpBox(this._textHintSummary, MessageType.Info);
+
+            if (GUILayout.Button(TextInstallAll)) {
+                foreach (var button in this._clearButtons) {
+                    this.Install(button);
+                }
+            }
+
+            GUILayout.Space(10);
+
+            this._doubleClickRequired = EditorGUILayout.Toggle(TextDoubleRequired, this._doubleClickRequired);
+            this._doubleClickDuration = EditorGUILayout.FloatField(TextDoubleClickDuration, this._doubleClickDuration);
+
+            GUILayout.Space(10);
+
             GUILayout.Label(TextInstallTargets, EditorStyles.boldLabel);
 
             EditorGUILayout.BeginHorizontal();
@@ -54,12 +74,6 @@ namespace net.ts7m.qvpen_safe_clear.editor {
             }
 
             EditorGUILayout.EndHorizontal();
-
-            if (GUILayout.Button(TextInstallAll)) {
-                foreach (var button in this._clearButtons) {
-                    this.Install(button);
-                }
-            }
 
             this._scrollPos = EditorGUILayout.BeginScrollView(this._scrollPos);
 
@@ -112,9 +126,6 @@ namespace net.ts7m.qvpen_safe_clear.editor {
 
             var gameObj = button.gameObject;
             var buttonEx = gameObj.AddUdonSharpComponent<QvPenInteractButtonExtended>();
-
-            buttonEx.InteractionText = button.InteractionText;
-
             var sButton = new SerializedObject(button);
             var sButtonEx = new SerializedObject(buttonEx);
 
@@ -143,8 +154,8 @@ namespace net.ts7m.qvpen_safe_clear.editor {
                 exUdonSharpBehaviours.GetArrayElementAtIndex(i).objectReferenceValue = udonSharpBehaviours.GetArrayElementAtIndex(i).objectReferenceValue;
             }
 
-            sButtonEx.FindProperty(PropNameRequireDoubleClick).boolValue = true;
-            sButtonEx.FindProperty(PropNameDoubleClickDuration).floatValue = 0.5f;
+            sButtonEx.FindProperty(PropNameRequireDoubleClick).boolValue = this._doubleClickRequired;
+            sButtonEx.FindProperty(PropNameDoubleClickDuration).floatValue = this._doubleClickDuration;
 
             sButtonEx.ApplyModifiedPropertiesWithoutUndo();
 
