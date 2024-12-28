@@ -1,2 +1,2 @@
-QvPenSafeClear: v0.1.0
+QvPenSafeClear: v0.2.0
 TargetQvPen: v3.2.15
