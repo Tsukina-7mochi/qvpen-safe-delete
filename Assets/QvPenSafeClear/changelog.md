@@ -1,5 +1,9 @@
 # Change Log
 
+# v0.2.1
+
+- エディタースクリプトの Assembly Definition の設定を修正
+
 # v0.2.0
 
 - UdonSharp Program Asset が含まれていなかったのを修正
