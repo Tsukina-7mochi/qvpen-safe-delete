@@ -1,12 +1,13 @@
+using System;
 using System.Collections.Generic;
 using QvPen.Udon.UI;
 using UnityEngine;
 using UnityEditor;
 using UdonSharpEditor;
 using net.ts7m.qvpen_safe_clear.udon;
-using VRC.SDK3.Components;
 
 namespace net.ts7m.qvpen_safe_clear.editor {
+    [Obsolete("Use latest QvPen instead.")]
     public class QvPenSafeClearInstallerWindow: EditorWindow {
         private const string PropNameCanUseEveryone = "canUseEveryone";
         private const string PropNameCanUseInstanceOwner = "canUseInstanceOwner";
@@ -22,6 +23,7 @@ namespace net.ts7m.qvpen_safe_clear.editor {
 
         private const string ClearCustomEventName = "Clear";
 
+        private const string TextDeprecated = "この拡張機能は非推奨です。代わりに最新の QvPen を使用してください。";
         private const string TextInstallTargets = "インストール先オブジェクト";
         private const string TextClearInstallTargets = "リストを空にする";
         private const string TextInstall = "インストール";
@@ -47,6 +49,8 @@ namespace net.ts7m.qvpen_safe_clear.editor {
         }
 
         private void OnGUI() {
+            EditorGUILayout.HelpBox(TextDeprecated, MessageType.Warning);
+
             EditorGUILayout.HelpBox(this._textHintSummary, MessageType.Info);
 
             if (GUILayout.Button(TextInstallAll)) {

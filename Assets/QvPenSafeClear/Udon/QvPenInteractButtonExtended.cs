@@ -1,11 +1,11 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
 
 namespace net.ts7m.qvpen_safe_clear.udon {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [Obsolete("Duplicated to QvPen's feature. Use latest QvPen Instead."), UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class QvPenInteractButtonExtended : UdonSharpBehaviour {
         [SerializeField] private bool canUseEveryone = false;
         [SerializeField] private bool canUseInstanceOwner = false;

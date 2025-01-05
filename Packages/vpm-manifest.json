@@ -10,7 +10,7 @@
       "version": "0.1.29"
     },
     "net.ureishi.qvpen": {
-      "version": "3.2.15"
+      "version": "3.3.1"
     }
   },
   "locked": {
@@ -29,9 +29,9 @@
       "dependencies": {}
     },
     "net.ureishi.qvpen": {
-      "version": "3.2.15",
+      "version": "3.3.1",
       "dependencies": {
-        "com.vrchat.worlds": "^3.4.0"
+        "com.vrchat.worlds": "^3.7.1"
       }
     }
   }
